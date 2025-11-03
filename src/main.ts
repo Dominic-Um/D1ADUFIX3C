@@ -1,9 +1,11 @@
 import wheelIconUrl from "./spinningwheel.jpg";
 import "./style.css";
 
-let speed = 0;
-let acceleration = 0;
+// Game state variables
+let speed = 0; // Represents the total accumulated speed (main resource)
+let acceleration = 0; // Represents how much speed increases per second
 
+// Interface defining the structure for each upgrade item
 interface Item {
   name: string;
   description: string;
@@ -12,6 +14,7 @@ interface Item {
   count: number;
 }
 
+// List of all available upgrades with their properties
 const availableItems: Item[] = [
   {
     name: "Alloy Wheels",
@@ -54,6 +57,7 @@ const availableItems: Item[] = [
   },
 ];
 
+// Create the main HTML structure for the game
 document.body.innerHTML = `
   <h1>🏁 Speed Clicker: Spin to Win 🏎️</h1>
 
@@ -85,10 +89,12 @@ document.body.innerHTML = `
   </div>
 `;
 
+// Select key UI elements
 const wheelButton = document.getElementById("wheelButton") as HTMLButtonElement;
 const speedDisplay = document.getElementById("speedDisplay") as HTMLDivElement;
 const accelDisplay = document.getElementById("accelDisplay") as HTMLDivElement;
 
+// Map upgrade buttons and counters to their respective items
 const upgradeButtons = availableItems.map(
   (item) =>
     document.getElementById(
@@ -102,6 +108,7 @@ const upgradeCounts = availableItems.map(
     ) as HTMLSpanElement,
 );
 
+// Updates all display elements based on the current game state
 function updateDisplay() {
   speedDisplay.textContent = `${speed.toFixed(3)} mph`;
   accelDisplay.textContent = `${acceleration.toFixed(3)} mph/sec`;
@@ -115,33 +122,37 @@ function updateDisplay() {
   });
 }
 
+// Adds manual speed when clicking the main button
 wheelButton.addEventListener("click", () => {
   speed++;
   updateDisplay();
 });
 
+// Handles purchasing of upgrades and applying their effects
 availableItems.forEach((item, i) => {
   upgradeButtons[i].addEventListener("click", () => {
     if (speed >= item.cost) {
       speed -= item.cost;
       item.count++;
       acceleration += item.rate;
-      item.cost *= 1.15;
+      item.cost *= 1.15; // Increases the cost by 15% after each purchase
       updateDisplay();
     }
   });
 });
 
+// Main animation loop for continuous speed increase
 let lastTime = performance.now();
 function animate(time: number) {
   const dt = (time - lastTime) / 1000;
   lastTime = time;
 
-  speed += acceleration * dt;
+  speed += acceleration * dt; // Increase speed based on acceleration over time
   updateDisplay();
 
-  requestAnimationFrame(animate);
+  requestAnimationFrame(animate); // Continuously update every animation frame
 }
 
+// Start the animation loop and initial display
 requestAnimationFrame(animate);
 updateDisplay();
