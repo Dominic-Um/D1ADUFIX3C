@@ -57,6 +57,20 @@ const availableItems: Item[] = [
   },
 ];
 
+// Updates all display elements based on the current game state
+function updateDisplay() {
+  speedDisplay.textContent = `${speed.toFixed(3)} mph`;
+  accelDisplay.textContent = `${acceleration.toFixed(3)} mph/sec`;
+
+  availableItems.forEach((item, i) => {
+    upgradeButtons[i].textContent = `Buy ${item.name} (${
+      item.cost.toFixed(1)
+    } mph)`;
+    upgradeButtons[i].disabled = speed < item.cost;
+    upgradeCounts[i].textContent = `Owned: ${item.count}`;
+  });
+}
+
 // Create the main HTML structure for the game
 document.body.innerHTML = `
   <h1>🏁 Speed Clicker: Spin to Win 🏎️</h1>
@@ -107,20 +121,6 @@ const upgradeCounts = availableItems.map(
       `count-${item.name.replace(/\s+/g, "")}`,
     ) as HTMLSpanElement,
 );
-
-// Updates all display elements based on the current game state
-function updateDisplay() {
-  speedDisplay.textContent = `${speed.toFixed(3)} mph`;
-  accelDisplay.textContent = `${acceleration.toFixed(3)} mph/sec`;
-
-  availableItems.forEach((item, i) => {
-    upgradeButtons[i].textContent = `Buy ${item.name} (${
-      item.cost.toFixed(1)
-    } mph)`;
-    upgradeButtons[i].disabled = speed < item.cost;
-    upgradeCounts[i].textContent = `Owned: ${item.count}`;
-  });
-}
 
 // Adds manual speed when clicking the main button
 wheelButton.addEventListener("click", () => {
