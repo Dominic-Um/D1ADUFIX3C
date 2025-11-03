@@ -12,12 +12,14 @@ interface Item {
   cost: number;
   rate: number;
   count: number;
+  id: string;
 }
 
 // List of all available upgrades with their properties
 const availableItems: Item[] = [
   {
     name: "Alloy Wheels",
+    id: "AlloyWheels",
     description: "Lightweight rims that reduce drag and boost your top speed.",
     cost: 10,
     rate: 0.1,
@@ -25,6 +27,7 @@ const availableItems: Item[] = [
   },
   {
     name: "Turbo Tires",
+    id: "TurboTires",
     description:
       "Grippy performance tires that give extra traction per second.",
     cost: 100,
@@ -33,6 +36,7 @@ const availableItems: Item[] = [
   },
   {
     name: "Nitro Boost",
+    id: "NitroBoost",
     description:
       "Injects pure speed into your system for explosive acceleration.",
     cost: 1000,
@@ -41,6 +45,7 @@ const availableItems: Item[] = [
   },
   {
     name: "Supercharger",
+    id: "Supercharger",
     description:
       "Forces more air into your engine for continuous high-speed gains.",
     cost: 5000,
@@ -49,6 +54,7 @@ const availableItems: Item[] = [
   },
   {
     name: "Rocket Engine",
+    id: "RocketEngine",
     description:
       "Replaces your motor entirely with jet propulsion—hold on tight!",
     cost: 25000,
@@ -90,10 +96,10 @@ document.body.innerHTML = `
     .map(
       (item) => `
         <div class="upgrade">
-          <button id="buy-${item.name.replace(/\s+/g, "")}" disabled>
+          <button id="buy-${item.id}" disabled>
             Buy ${item.name} (${item.cost.toFixed(1)} mph)
           </button>
-          <span id="count-${item.name.replace(/\s+/g, "")}">Owned: 0</span>
+          <span id="count-${item.id}">Owned: 0</span>
           <p class="description">${item.description}</p>
         </div>
       `,
@@ -110,16 +116,10 @@ const accelDisplay = document.getElementById("accelDisplay") as HTMLDivElement;
 
 // Map upgrade buttons and counters to their respective items
 const upgradeButtons = availableItems.map(
-  (item) =>
-    document.getElementById(
-      `buy-${item.name.replace(/\s+/g, "")}`,
-    ) as HTMLButtonElement,
+  (item) => document.getElementById(`buy-${item.id}`) as HTMLButtonElement,
 );
 const upgradeCounts = availableItems.map(
-  (item) =>
-    document.getElementById(
-      `count-${item.name.replace(/\s+/g, "")}`,
-    ) as HTMLSpanElement,
+  (item) => document.getElementById(`count-${item.id}`) as HTMLSpanElement,
 );
 
 // Adds manual speed when clicking the main button
